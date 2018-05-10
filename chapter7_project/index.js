@@ -166,13 +166,14 @@ View.prototype.find = function(ch) {
 function Wall() {}
 
 var world = new World(plan, {'#': Wall, 'o': BouncingCritter});
-for (var i = 0; i < 5; i++) {
-    world.turn();
-    console.log(world.toString());
-}
+// for (var i = 0; i < 5; i++) {
+//     world.turn();
+//     console.log(world.toString());
+// }
+animateWorld(world);
+
 
 // console.log(world.toString());
-
 // var test = {
 //     prop: 10,
 //     addPropTo: function(array) {
