@@ -170,16 +170,40 @@ var world = new World(plan, {'#': Wall, 'o': BouncingCritter});
 //     world.turn();
 //     console.log(world.toString());
 // }
-animateWorld(world);
+// animateWorld(world);
 
+var directionNames = Object.keys(directions);
 
-// console.log(world.toString());
-// var test = {
-//     prop: 10,
-//     addPropTo: function(array) {
-//         return array.map(function(elt) {
-//             return this.prop + elt;
-//         }.bind(this));
-//     }
-// };
-// console.log(test.addPropTo([5]));
+function dirPlus (dir, n) {
+    var index = directionNames.indexOf(dir);
+    return directionNames[(index + n + 8) % 8];
+}
+
+function WallFollower() {
+    this.dir = 's';
+}
+WallFollower.prototype.act = function(view) {
+    var start = this.dir;
+    if (view.look(dirPlus(this.dir, -3)) !== ' ') {
+        start = this.dir = dirPlus(this.dir, -2);
+    }
+    while (view.look(this.dir) !== ' ') {
+        this.dir = dirPlus(this.dir, 1);
+        if (this.dir === start) break;
+    }
+    return {type: 'move', direction: this.dir};
+}
+
+animateWorld(new World(
+    ["############",
+     "#     #    #",
+     "#   ~    ~ #",
+     "#  ##      #",
+     "#  ##  o####",
+     "#          #",
+     "############"],
+    {"#": Wall,
+     "~": WallFollower,
+     "o": BouncingCritter}
+    )
+);
